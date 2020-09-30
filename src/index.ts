@@ -1,6 +1,4 @@
 import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
 import * as http from 'http';
 import { timeParser } from './lib/date';
 import logger from './logger';
