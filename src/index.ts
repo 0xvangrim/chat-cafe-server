@@ -34,7 +34,6 @@ const disconnectUser = (socket, username) => {
 io.on(CHANNELS.CONNECTION, (socket: any) => {
     logger.info(LOGGER.INFO.CLIENT_CONNECTED);
     clients[socket.id] = socket;
-
     socket.on(CHANNELS.DISCONNECT, (username) => {
         socket.removeAllListeners();
         delete clients[socket.id];
@@ -58,18 +57,19 @@ io.on(CHANNELS.CONNECTION, (socket: any) => {
         logger.info(`${username} ${LOGGER.USER.LOGGED_IN}`);
     });
 
-    socket.on(CHANNELS.NEWS, (content) => {
+
+    socket.on(CHANNELS.USERNAME_CHECK, (username) => {
+        userNameCheck(username, activeUserList, socket);
+    });
+    socket.on(CHANNELS.SEND_MESSAGES, (content) => {
         const newContent = messageParser(content, timeParser);
         resetInactivityTimer(inactivity);
-        io.emit(CHANNELS.NEWS, JSON.stringify(newContent));
+        socket.broadcast.emit(CHANNELS.RECEIVE_MESSAGES, JSON.stringify(newContent));
+        console.log('UPDATED LULU')
         if (newContent !== null || newContent !== undefined) {
             inactivity = startInactivityTimer(disconnectUser, INACTIVITY_TIMER, socket, newContent.user);
         }
         logger.info(LOGGER.USER.NEW_MESSAGES);
-    });
-
-    socket.on(CHANNELS.USERNAME_CHECK, (username) => {
-        userNameCheck(username, activeUserList, socket);
     });
 
     const handleExit = (signal) => {

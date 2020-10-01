@@ -71,17 +71,18 @@ io.on(channels_1.CHANNELS.CONNECTION, (socket) => {
         socket.broadcast.emit(channels_1.CHANNELS.USER_HAS_JOINED, `${username} ${messages_1.SERVER_MESSAGES.USER_HAS_JOINED}`);
         logger_1.default.info(`${username} ${messages_1.LOGGER.USER.LOGGED_IN}`);
     });
-    socket.on(channels_1.CHANNELS.NEWS, (content) => {
+    socket.on(channels_1.CHANNELS.USERNAME_CHECK, (username) => {
+        userNameCheck_1.userNameCheck(username, activeUserList, socket);
+    });
+    socket.on(channels_1.CHANNELS.SEND_MESSAGES, (content) => {
         const newContent = messageParser_1.messageParser(content, date_1.timeParser);
         inactivity_1.resetInactivityTimer(inactivity);
-        io.emit(channels_1.CHANNELS.NEWS, JSON.stringify(newContent));
+        socket.broadcast.emit(channels_1.CHANNELS.RECEIVE_MESSAGES, JSON.stringify(newContent));
+        console.log('UPDATED LULU');
         if (newContent !== null || newContent !== undefined) {
             inactivity = inactivity_1.startInactivityTimer(disconnectUser, inactivity_1.INACTIVITY_TIMER, socket, newContent.user);
         }
         logger_1.default.info(messages_1.LOGGER.USER.NEW_MESSAGES);
-    });
-    socket.on(channels_1.CHANNELS.USERNAME_CHECK, (username) => {
-        userNameCheck_1.userNameCheck(username, activeUserList, socket);
     });
     const handleExit = (signal) => {
         logger_1.default.info(`${signal} ${messages_1.LOGGER.INFO.RECEIVED_SIGNAL}`);
