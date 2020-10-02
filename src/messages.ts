@@ -24,6 +24,7 @@ export const SERVER_MESSAGES = {
     USER_HAS_LEFT: 'has left the chat',
     USER_HAS_JOINED: 'has joined us!',
     DISCONNECT_INACTIVITY: 'has been disconnected due to inactivity',
+    WELCOME: 'Welcome',
 };
 
 export const USERNAME_CHECK = {

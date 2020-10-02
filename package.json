@@ -4,8 +4,8 @@
   "description": "Server for the chat-cafe application",
   "main": "build/index.js",
   "scripts": {
-    "start:build": "tsc",
-    "start:run": "node build/index.js",
+    "start:build": "tsc -w",
+    "start:run": "nodemon build/index.js",
     "start": "concurrently npm:start:*",
     "test": "test",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
@@ -44,6 +44,7 @@
     "firebase": "^7.19.0",
     "http-shutdown": "^1.2.2",
     "jest": "^26.4.2",
+    "nodemon": "^2.0.4",
     "redux": "^4.0.5",
     "socket.io": "^2.3.0",
     "winston": "^3.3.3"
