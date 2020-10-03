@@ -8,7 +8,7 @@ import { LOGGER, SERVER_MESSAGES } from './messages';
 import { CHANNELS } from './channels';
 import { userNameCheck } from './lib/userNameCheck';
 
-export const INACTIVITY_TIMER = 100000;
+export const INACTIVITY_TIMER = 10000;
 
 const socketio = require('socket.io');
 
@@ -17,6 +17,8 @@ const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
 
 const io = socketio(server);
+
+io.set('origins', '*:*');
 
 const clients = {};
 const userTimeList = [];
