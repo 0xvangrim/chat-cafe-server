@@ -7,7 +7,6 @@ import { LOGGER, SERVER_MESSAGES } from './messages';
 import { CHANNELS } from './channels';
 import { userNameCheck } from './lib/userNameCheck';
 
-
 export const INACTIVITY_TIMER = 10000;
 
 const cors = require('cors');
@@ -20,21 +19,22 @@ app.use(cors());
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
 
-const io = socketio(server, {
-    handlePreflightRequest: (req, res) => {
-        const headers = {
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Allow-Origin': req.headers.origin, //or the specific origin you want to give access to,
-            'Access-Control-Allow-Credentials': true,
-        };
-        res.writeHead(200, headers);
-        res.end();
-    },
-});
+const io = socketio(server);
 
 //io.set('origins', 'https://chat-cafe-client.vercel.app/:*');
 
 io.origins(['*:*']);
+
+io.use((req, res, next) => {
+    const headers = {
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Origin': req.headers.origin,
+        'Access-Control-Allow-Credentials': true,
+    };
+    res.writeHead(200, headers);
+    res.end();
+    next();
+});
 
 const clients = {};
 const userTimeList = [];

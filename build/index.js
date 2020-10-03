@@ -31,11 +31,11 @@ const messageParser_1 = require("./lib/messageParser");
 const messages_1 = require("./messages");
 const channels_1 = require("./channels");
 const userNameCheck_1 = require("./lib/userNameCheck");
-const cors_1 = __importDefault(require("cors"));
 exports.INACTIVITY_TIMER = 10000;
+const cors = require('cors');
 const socketio = require('socket.io');
 const app = express_1.default();
-app.use(cors_1.default());
+app.use(cors());
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
 const io = socketio(server, {
