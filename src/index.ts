@@ -3,7 +3,6 @@ import * as http from 'http';
 import { timeParser } from './lib/date';
 import logger from './logger';
 import { messageParser } from './lib/messageParser';
-//import { startInactivityTimer, resetInactivityTimer, INACTIVITY_TIMER } from './lib/inactivity';
 import { LOGGER, SERVER_MESSAGES } from './messages';
 import { CHANNELS } from './channels';
 import { userNameCheck } from './lib/userNameCheck';
@@ -15,13 +14,12 @@ const socketio = require('socket.io');
 
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
 
-const io = socketio(server);
-
+const io = socketio.listen(server, { origins: '*:*' });
 
 io.origins(['https://chat-cafe-client.vercel.app/:*']);
 
@@ -104,7 +102,6 @@ io.on(CHANNELS.CONNECTION, (socket: any) => {
     process.on('SIGINT', handleExit);
     process.on('SIGTERM', handleExit);
 });
-
 
 app.use((err, req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
