@@ -7,6 +7,7 @@ import { messageParser } from './lib/messageParser';
 import { LOGGER, SERVER_MESSAGES } from './messages';
 import { CHANNELS } from './channels';
 import { userNameCheck } from './lib/userNameCheck';
+import cors from 'cors'
 
 export const INACTIVITY_TIMER = 10000;
 
@@ -19,6 +20,8 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 io.set('origins', '*:*');
+
+app.use(cors())
 
 const clients = {};
 const userTimeList = [];
