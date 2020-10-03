@@ -21,24 +21,9 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
-//io.set('origins', 'https://chat-cafe-client.vercel.app/:*');
-
-io.origins(['*:*']);
+io.origins('*')
 
 /*
-io.use((req, res, next) => {
-    console.log('gets inside')
-    const headers = {
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-    };
-    res.headers(headers);
-    res.end();
-    next();
-});
-*/
-
 io.origins((origin, callback) => {
     if (origin !== 'https://chat-cafe-client.vercel.app/') {
         console.log('HGOGOG', origin)
@@ -48,6 +33,7 @@ io.origins((origin, callback) => {
     console.log('GOGOGOGOGOGOGGOGOGO')
   });
 
+  */
 const clients = {};
 const userTimeList = [];
 const activeUserList = [];
