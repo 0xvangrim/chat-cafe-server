@@ -14,14 +14,17 @@ const socketio = require('socket.io');
 
 const app = express();
 
-app.use(cors());
+app.use(cors())
 
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
 
-const io = socketio.listen(server, { origins: '*:*' });
+const io = socketio(server);
 
-io.origins(['https://chat-cafe-client.vercel.app/:*']);
+io.set('origins', 'https://chat-cafe-client.vercel.app/:*')
+
+
+io.origins(['*:*']);
 
 const clients = {};
 const userTimeList = [];
@@ -102,6 +105,7 @@ io.on(CHANNELS.CONNECTION, (socket: any) => {
     process.on('SIGINT', handleExit);
     process.on('SIGTERM', handleExit);
 });
+
 
 app.use((err, req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
