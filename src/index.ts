@@ -6,10 +6,11 @@ import { messageParser } from './lib/messageParser';
 import { LOGGER, SERVER_MESSAGES } from './messages';
 import { CHANNELS } from './channels';
 import { userNameCheck } from './lib/userNameCheck';
-import cors from 'cors';
+
 
 export const INACTIVITY_TIMER = 10000;
 
+const cors = require('cors');
 const socketio = require('socket.io');
 
 const app = express();
