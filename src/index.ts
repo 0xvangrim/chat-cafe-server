@@ -7,7 +7,7 @@ import { messageParser } from './lib/messageParser';
 import { LOGGER, SERVER_MESSAGES } from './messages';
 import { CHANNELS } from './channels';
 import { userNameCheck } from './lib/userNameCheck';
-import cors from 'cors'
+import cors from 'cors';
 
 export const INACTIVITY_TIMER = 10000;
 
@@ -19,9 +19,13 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
-io.set('origins', '*:*');
-
-app.use(cors())
+io.origins((origin, callback) => {
+    if (origin !== 'https://chat-cafe-client.vercel.app/') {
+        return callback('origin not allowed', false);
+    }
+    callback(null, true);
+});
+app.use(cors());
 
 const clients = {};
 const userTimeList = [];
