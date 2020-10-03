@@ -14,17 +14,26 @@ const socketio = require('socket.io');
 
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
 
-const io = socketio(server);
+const io = socketio(server, {
+    handlePreflightRequest: (req, res) => {
+        const headers = {
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Allow-Origin': req.headers.origin, //or the specific origin you want to give access to,
+            'Access-Control-Allow-Credentials': true,
+        };
+        res.writeHead(200, headers);
+        res.end();
+    },
+});
 
-io.set('origins', 'https://chat-cafe-client.vercel.app/:*')
+//io.set('origins', 'https://chat-cafe-client.vercel.app/:*');
 
-
-io.origins(['*:*']);
+//io.origins(['*:*']);
 
 const clients = {};
 const userTimeList = [];
@@ -105,7 +114,6 @@ io.on(CHANNELS.CONNECTION, (socket: any) => {
     process.on('SIGINT', handleExit);
     process.on('SIGTERM', handleExit);
 });
-
 
 app.use((err, req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
