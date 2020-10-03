@@ -19,13 +19,7 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
-io.origins((origin, callback) => {
-    if (origin !== 'https://chat-cafe-client.vercel.app/') {
-        return callback('origin not allowed', false);
-    }
-    callback(null, true);
-});
-app.use(cors());
+io.origins(['*']);
 
 const clients = {};
 const userTimeList = [];
