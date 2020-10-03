@@ -20,9 +20,9 @@ const io = socketio(server);
 
 const clients = {};
 const userTimeList = [];
-const userList = []
+const activeUserList = [];
 
-let inactivity = [];
+const inactivityVariables = [];
 
 let currentUser;
 
@@ -30,11 +30,11 @@ const disconnectUser = (socket, username) => {
     socket.emit(CHANNELS.USER_INACTIVITY, `${username} `);
     socket.broadcast.emit(CHANNELS.USER_HAS_LEFT, `${username} ${SERVER_MESSAGES.DISCONNECT_INACTIVITY}`);
     logger.info(`${username} ${LOGGER.USER.HAS_BEEN_DISCONNECTED}`);
-    const indexOfUser = userList.indexOf(username);
-    userList.splice(indexOfUser, 1);
+    const indexOfUser = activeUserList.indexOf(username);
+    activeUserList.splice(indexOfUser, 1);
 };
 
-const findUser = (activeUserList, username) => activeUserList.filter((r) => (r.NAME = username));
+const findUser = (activeUserList, username) => activeUserList.filter((r) => (r.username = username));
 
 io.on(CHANNELS.CONNECTION, (socket: any) => {
     logger.info(LOGGER.INFO.CLIENT_CONNECTED);
@@ -43,36 +43,34 @@ io.on(CHANNELS.CONNECTION, (socket: any) => {
     socket.on(CHANNELS.DISCONNECT, (username) => {
         clients[socket.id].removeAllListeners();
         logger.info(LOGGER.INFO.CLIENT_DISCONNECTED);
-        const indexOfUser = userList.indexOf(username);
-        userList.splice(indexOfUser, 1);
-        inactivity = [];
+        const indexOfUser = activeUserList.indexOf(username);
+        activeUserList.splice(indexOfUser, 1);
     });
 
     socket.on(CHANNELS.USER_HAS_LEFT, (username) => {
         socket.broadcast.emit(CHANNELS.USER_HAS_LEFT, `${username} ${SERVER_MESSAGES.USER_HAS_LEFT}`);
         logger.info(`${username} ${LOGGER.USER.HAS_LEFT}`);
-        const indexOfUser = userList.indexOf(username);
-        userList.splice(indexOfUser, 1);
+        const indexOfUser = activeUserList.indexOf(username);
+        activeUserList.splice(indexOfUser, 1);
     });
 
     socket.on(CHANNELS.USERNAME, (username) => {
         currentUser = findUser(userTimeList, username);
-        currentUser[0].startTimer(username);
+        currentUser[0].startTimer(username, socket);
         socket.emit(CHANNELS.USER_HAS_JOINED, `${SERVER_MESSAGES.WELCOME} ${username}`);
         socket.broadcast.emit(CHANNELS.USER_HAS_JOINED, `${username} ${SERVER_MESSAGES.USER_HAS_JOINED}`);
         logger.info(`${username} ${LOGGER.USER.LOGGED_IN}`);
     });
 
     socket.on(CHANNELS.USERNAME_CHECK, (username) => {
-        userNameCheck(username, userList, socket);
-
+        userNameCheck(username, activeUserList, socket);
         userTimeList.push({
-            NAME: username,
-            startTimer: (username) => {
-                inactivity[username] = setTimeout(disconnectUser, INACTIVITY_TIMER, clients[socket.id], username);
+            username,
+            startTimer: (username, socket) => {
+                inactivityVariables[username] = setTimeout(disconnectUser, INACTIVITY_TIMER, socket, username);
             },
             resetTimer: (username) => {
-                clearTimeout(inactivity[username]);
+                clearTimeout(inactivityVariables[username]);
             },
         });
     });
@@ -82,8 +80,7 @@ io.on(CHANNELS.CONNECTION, (socket: any) => {
         currentUser[0].resetTimer(newContent.user);
         socket.broadcast.emit(CHANNELS.RECEIVE_MESSAGES, JSON.stringify(newContent));
         logger.info(LOGGER.USER.NEW_MESSAGES);
-        currentUser[0].startTimer(newContent.user);
-        console.log(inactivity, 'INACTIVITY');
+        currentUser[0].startTimer(newContent.user, socket);
     });
 
     const handleExit = (signal) => {
