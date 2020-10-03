@@ -31,7 +31,7 @@ io.use((req, res, next) => {
         'Access-Control-Allow-Origin': req.headers.origin,
         'Access-Control-Allow-Credentials': true,
     };
-    res.writeHead(200, headers);
+    res.setHeader(headers);
     res.end();
     next();
 });
