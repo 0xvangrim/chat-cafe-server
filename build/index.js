@@ -28,16 +28,29 @@ const http = __importStar(require("http"));
 const date_1 = require("./lib/date");
 const logger_1 = __importDefault(require("./logger"));
 const messageParser_1 = require("./lib/messageParser");
-//import { startInactivityTimer, resetInactivityTimer, INACTIVITY_TIMER } from './lib/inactivity';
 const messages_1 = require("./messages");
 const channels_1 = require("./channels");
 const userNameCheck_1 = require("./lib/userNameCheck");
+const cors_1 = __importDefault(require("cors"));
 exports.INACTIVITY_TIMER = 10000;
 const socketio = require('socket.io');
 const app = express_1.default();
+app.use(cors_1.default());
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketio(server, {
+    handlePreflightRequest: (req, res) => {
+        const headers = {
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Allow-Origin': req.headers.origin,
+            'Access-Control-Allow-Credentials': true,
+        };
+        res.writeHead(200, headers);
+        res.end();
+    },
+});
+//io.set('origins', 'https://chat-cafe-client.vercel.app/:*');
+io.origins(['*:*']);
 const clients = {};
 const userTimeList = [];
 const activeUserList = [];
@@ -107,7 +120,12 @@ io.on(channels_1.CHANNELS.CONNECTION, (socket) => {
     process.on('SIGTERM', handleExit);
 });
 app.use((err, req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.status(err.status || 500);
+    next();
     res.json({
         error: {
             message: err.message || '500: Internal Server Error',

@@ -33,7 +33,7 @@ const io = socketio(server, {
 
 //io.set('origins', 'https://chat-cafe-client.vercel.app/:*');
 
-//io.origins(['*:*']);
+io.origins(['*:*']);
 
 const clients = {};
 const userTimeList = [];
