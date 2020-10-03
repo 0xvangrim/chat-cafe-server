@@ -19,7 +19,7 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
-io.origins(['*']);
+io.origins(['https://chat-cafe-client.vercel.app/:*']);
 
 const clients = {};
 const userTimeList = [];
