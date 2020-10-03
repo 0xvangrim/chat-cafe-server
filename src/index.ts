@@ -41,7 +41,7 @@ io.use((req, res, next) => {
 
 io.origins((origin, callback) => {
     if (origin !== 'https://chat-cafe-client.vercel.app/') {
-        console.log('HGOGOG')
+        console.log('HGOGOG', origin)
       return callback('origin not allowed', false);
     }
     callback(null, true);
