@@ -25,16 +25,28 @@ const io = socketio(server);
 
 io.origins(['*:*']);
 
+/*
 io.use((req, res, next) => {
+    console.log('gets inside')
     const headers = {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Origin': req.headers.origin,
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     };
-    res.setHeader(headers);
+    res.headers(headers);
     res.end();
     next();
 });
+*/
+
+io.origins((origin, callback) => {
+    if (origin !== 'https://chat-cafe-client.vercel.app/') {
+        console.log('HGOGOG')
+      return callback('origin not allowed', false);
+    }
+    callback(null, true);
+    console.log('GOGOGOGOGOGOGGOGOGO')
+  });
 
 const clients = {};
 const userTimeList = [];
