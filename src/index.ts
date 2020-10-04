@@ -7,7 +7,7 @@ import { LOGGER, SERVER_MESSAGES } from './messages';
 import { CHANNELS } from './channels';
 import { userNameCheck } from './lib/userNameCheck';
 
-export const INACTIVITY_TIMER = 10000;
+export const INACTIVITY_TIMER = 100000;
 
 const socketio = require('socket.io');
 
@@ -18,19 +18,6 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
-//io.origins(['*:*'])
-
-/*
-io.origins((origin, callback) => {
-    if (origin !== 'https://chat-cafe-client.vercel.app/') {
-        console.log('HGOGOG', origin)
-      return callback('origin not allowed', false);
-    }
-    callback(null, true);
-    console.log('GOGOGOGOGOGOGGOGOGO')
-  });
-
-  */
 const clients = {};
 const userTimeList = [];
 const activeUserList = [];

@@ -1,5 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
 exports.USERNAME_CHECK = exports.SERVER_MESSAGES = exports.LOGGER = void 0;
 exports.LOGGER = {
     INFO: {
