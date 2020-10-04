@@ -9,12 +9,9 @@ import { userNameCheck } from './lib/userNameCheck';
 
 export const INACTIVITY_TIMER = 10000;
 
-const cors = require('cors');
 const socketio = require('socket.io');
 
 const app = express();
-
-app.use(cors());
 
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
