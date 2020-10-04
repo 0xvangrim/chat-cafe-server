@@ -1,4 +1,4 @@
-export const timeParser = (timestamp) => {
+export default function timeParser (timestamp) {
     const dateObj = new Date(timestamp);
     const hours = dateObj.getHours();
     const minutes = '0' + dateObj.getMinutes();

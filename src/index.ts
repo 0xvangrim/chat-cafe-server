@@ -1,6 +1,6 @@
 import express from 'express';
 import * as http from 'http';
-import { timeParser } from './lib/date';
+import timeParser from './lib/date';
 import logger from './logger';
 import { messageParser } from './lib/messageParser';
 import { LOGGER, SERVER_MESSAGES } from './messages';

@@ -25,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.INACTIVITY_TIMER = void 0;
 const express_1 = __importDefault(require("express"));
 const http = __importStar(require("http"));
-const date_1 = require("./lib/date");
+const date_1 = __importDefault(require("./lib/date"));
 const logger_1 = __importDefault(require("./logger"));
 const messageParser_1 = require("./lib/messageParser");
 const messages_1 = require("./messages");
@@ -99,7 +99,7 @@ io.on(channels_1.CHANNELS.CONNECTION, (socket) => {
         });
     });
     socket.on(channels_1.CHANNELS.SEND_MESSAGES, (content) => {
-        const newContent = messageParser_1.messageParser(content, date_1.timeParser);
+        const newContent = messageParser_1.messageParser(content, date_1.default);
         currentUser = findUser(userTimeList, newContent.user);
         currentUser[0].resetTimer(newContent.user);
         socket.broadcast.emit(channels_1.CHANNELS.RECEIVE_MESSAGES, JSON.stringify(newContent));
