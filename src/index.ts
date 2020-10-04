@@ -21,7 +21,7 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
-io.origins(['*:*'])
+//io.origins(['*:*'])
 
 /*
 io.origins((origin, callback) => {
