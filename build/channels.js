@@ -1,5 +1,5 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CHANNELS = void 0;
 exports.CHANNELS = {
     USER_HAS_LEFT: 'user has left',

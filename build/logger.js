@@ -1,5 +1,5 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const { createLogger, format, transports } = require('winston');
 const { combine, prettyPrint, timestamp } = format;
 const logger = createLogger({

@@ -1,5 +1,5 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function timeParser(timestamp) {
     const dateObj = new Date(timestamp);
     const hours = dateObj.getHours();
